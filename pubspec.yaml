@@ -67,6 +67,9 @@ dependencies:
   # Google Fonts
   google_fonts: ^6.2.1
 
+  # Skeleton
+  skeletonizer: ^1.4.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
