@@ -15,6 +15,18 @@ final router = GoRouter(
   },
   routes: [
     GoRoute(
+      name: 'ChatPage',
+      path: '/',
+      pageBuilder: (context, state) => fadeTransitionPage(
+        context,
+        state,
+        const ChatPage(),
+      ),
+      redirect: (context, state) {
+        return null;
+      },
+    ),
+    GoRoute(
       name: 'message_page',
       path: '/',
       pageBuilder: (context, state) => fadeTransitionPage(

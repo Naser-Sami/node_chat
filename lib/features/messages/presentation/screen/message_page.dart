@@ -44,6 +44,7 @@ class MessagePage extends StatelessWidget {
           const SizedBox(height: TSize.s16),
           Expanded(
             child: NeumorphismContainer(
+              borderRadius: BorderRadius.circular(TRadius.bR30),
               child: Padding(
                 padding: const EdgeInsets.all(TPadding.p08),
                 child: ListView.builder(

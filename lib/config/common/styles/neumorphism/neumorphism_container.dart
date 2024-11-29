@@ -13,7 +13,7 @@ class NeumorphismContainer extends StatelessWidget {
       this.userDefaultMargin = false,
       this.surfaceColor,
       this.blurRadius = 10,
-      this.offset = const Offset(10, 10)});
+      this.offset = const Offset(5, 5)});
 
   final Widget? child;
   final BoxShape shape;
@@ -41,7 +41,7 @@ class NeumorphismContainer extends StatelessWidget {
       margin: margin(),
       decoration: BoxDecoration(
         color: surfaceColor ?? Theme.of(context).colorScheme.surface,
-        borderRadius: (shape == BoxShape.rectangle) ? borderRadius ?? BorderRadius.circular(30) : null,
+        borderRadius: (shape == BoxShape.rectangle) ? borderRadius ?? BorderRadius.circular(16) : null,
         shape: shape,
         boxShadow: [
           // Right and Bottom
