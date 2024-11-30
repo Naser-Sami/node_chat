@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:node_chat/core/utils/extensions/extensions_on_widgets.dart';
 
+import '/core/_core.dart';
 import '/config/_config.dart';
 
 class ChatPage extends StatelessWidget {
@@ -61,7 +61,12 @@ class ChatPage extends StatelessWidget {
                 ),
               ),
             ),
-            _buildMessageInput(context),
+            TextFormFieldWidget(
+              controller: TextEditingController(),
+              hintText: 'Message',
+              leadingIcon: Icons.camera_alt,
+              trailingIcon: Icons.send,
+            ),
           ],
         ),
       ),
@@ -106,49 +111,6 @@ class ChatPage extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildMessageInput(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(TPadding.p24),
-      padding: const EdgeInsets.symmetric(horizontal: TPadding.p16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(TRadius.bR30),
-        border: Border.all(
-          color: Theme.of(context).colorScheme.scrim,
-        ),
-      ),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () {},
-            child: const Icon(
-              Icons.camera_alt,
-              color: Colors.grey,
-            ),
-          ),
-          TSize.s10.toWidth,
-          const Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Message',
-                hintStyle: TextStyle(color: Colors.grey),
-                border: InputBorder.none,
-              ),
-            ),
-          ),
-          TSize.s10.toWidth,
-          GestureDetector(
-            onTap: () {},
-            child: const Icon(
-              Icons.send,
-              color: Colors.grey,
-            ),
-          ),
-        ],
       ),
     );
   }

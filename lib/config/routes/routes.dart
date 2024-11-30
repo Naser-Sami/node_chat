@@ -15,8 +15,32 @@ final router = GoRouter(
   },
   routes: [
     GoRoute(
-      name: 'ChatPage',
+      name: 'LoginPage',
       path: '/',
+      pageBuilder: (context, state) => fadeTransitionPage(
+        context,
+        state,
+        const LoginPage(),
+      ),
+      redirect: (context, state) {
+        return null;
+      },
+    ),
+    GoRoute(
+      name: 'RegisterPage',
+      path: '/RegisterPage',
+      pageBuilder: (context, state) => fadeTransitionPage(
+        context,
+        state,
+        const RegisterPage(),
+      ),
+      redirect: (context, state) {
+        return null;
+      },
+    ),
+    GoRoute(
+      name: 'ChatPage',
+      path: '/ChatPage',
       pageBuilder: (context, state) => fadeTransitionPage(
         context,
         state,
@@ -27,8 +51,8 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      name: 'message_page',
-      path: '/',
+      name: 'MessagePage',
+      path: '/MessagePage',
       pageBuilder: (context, state) => fadeTransitionPage(
         context,
         state,

@@ -8,10 +8,11 @@ ThemeData _darkTheme = ThemeData.dark(useMaterial3: true).copyWith(
   appBarTheme: darkAppBarTheme,
   textTheme: TTextTheme.darkTextTheme,
   primaryTextTheme: TTextTheme.darkTextTheme,
-  textButtonTheme: darkTextButtonTheme,
   extensions: darkExtensions,
   dividerTheme: darkDividerTheme,
   dividerColor: DarkThemeColors.onBackground.withOpacity(0.25),
+  textButtonTheme: darkTextButtonTheme,
+  elevatedButtonTheme: darkElevatedButtonTheme,
   // buttonTheme: const ButtonThemeData(
   //   splashColor: Colors.transparent,
   //   highlightColor: Colors.transparent,
