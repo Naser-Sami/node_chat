@@ -1,109 +1,176 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 
 class ApiClient {
-  final Dio dio = Dio(
+  static const String baseUrl = 'http://localhost:3000';
+
+  // Dio instance
+  static final Dio dio = Dio(
     BaseOptions(
-      baseUrl: '',
+      baseUrl: baseUrl,
       connectTimeout: const Duration(seconds: 5),
       receiveTimeout: const Duration(seconds: 5),
       headers: {'Content-Type': 'application/json'},
     ),
   );
 
-  // Declare a variable to hold the CancelToken for the current request.
-  CancelToken? cancelToken;
+  // Optional cancel token for request cancellation
+  static CancelToken? cancelToken;
 
+  // Constructor to add interceptors
   ApiClient() {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
-          log('Sending request to: ${options.uri}');
+          log('Request: ${options.method} ${options.uri}');
           return handler.next(options);
         },
         onResponse: (response, handler) {
-          log('Received response: ${response.statusCode}');
+          log('Response: [${response.statusCode}] ${response.realUri}');
+          return handler.next(response);
         },
-        onError: (error, handler) async {
-          int retryCount = 0;
-          int maxRetries = 3;
-          while (retryCount < maxRetries && error.type == DioExceptionType.connectionTimeout) {
-            retryCount++;
-
-            try {
-              log('Connection timeout, retrying...');
-              final res = await dio.request(error.requestOptions.path);
-              return handler.resolve(res);
-            } catch (e) {
-              log(e.toString());
-            }
-          }
-
+        onError: (error, handler) {
+          log('Error: [${error.response?.statusCode}] ${error.message}');
           return handler.next(error);
         },
       ),
     );
   }
 
-  void checkCancelToken() {
-    // Check if there is an existing CancelToken and if it has not been canceled.
+  /// Cancel any ongoing requests
+  static void cancelOngoingRequests() {
     if (cancelToken != null && !cancelToken!.isCancelled) {
-      // Cancel the previous request if it hasn't been completed yet.
-      cancelToken?.cancel('Previous request canceled.');
+      cancelToken?.cancel('Request canceled.');
     }
-
-    // Create a new CancelToken for the current request.
     cancelToken = CancelToken();
   }
 
-  Future<Object?> fetch(String path, {Object? data, Map<String, dynamic>? queryParameters}) async {
-    checkCancelToken();
-
+  /// General HTTP Request Handler
+  static Future<T?> request<T>({
+    required String path,
+    required String method,
+    Map<String, dynamic>? queryParameters,
+    Object? data,
+    Map<String, dynamic>? headers,
+    CancelToken? token,
+    T Function(dynamic data)? parser,
+  }) async {
     try {
-      Response response = await dio.get(
+      // Make HTTP request
+      final response = await dio.request(
         path,
-        data: data,
+        options: Options(method: method, headers: headers),
         queryParameters: queryParameters,
-        cancelToken: cancelToken,
+        data: data,
+        cancelToken: token ?? cancelToken,
       );
 
-      final responseData = jsonDecode(response.data);
-      return responseData;
+      // Parse response using the provided parser
+      if (parser != null) {
+        return parser(response.data);
+      } else {
+        return response.data as T;
+      }
     } on DioException catch (e) {
+      log('DioException: ${e.message}');
       if (CancelToken.isCancel(e)) {
-        // Check if the error was due to a canceled request.
-        log('Request canceled $e');
+        log('Request canceled');
+      } else {
+        handleError(e);
       }
       return null;
     } catch (e) {
-      log('Error fetching posts: $e');
+      log('Unhandled error: $e');
       return null;
     }
   }
 
-  Future<List<dynamic>> fetchList(String path, {Object? data, Map<String, dynamic>? queryParameters}) async {
-    checkCancelToken();
+  /// GET Method
+  static Future<T?> get<T>({
+    required String path,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+    CancelToken? token,
+    T Function(dynamic data)? parser,
+  }) async {
+    return request(
+      path: path,
+      method: 'GET',
+      queryParameters: queryParameters,
+      headers: headers,
+      token: token,
+      parser: parser,
+    );
+  }
 
-    try {
-      Response response = await dio.get(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        cancelToken: cancelToken,
-      );
+  /// POST Method
+  static Future<T?> post<T>({
+    required String path,
+    Object? data,
+    Map<String, dynamic>? headers,
+    CancelToken? token,
+    T Function(dynamic data)? parser,
+  }) async {
+    return request(
+      path: path,
+      method: 'POST',
+      data: data,
+      headers: headers,
+      token: token,
+      parser: parser,
+    );
+  }
 
-      final responseData = jsonDecode(response.data);
-      return responseData as List<dynamic>;
-    } on DioException catch (e) {
-      if (CancelToken.isCancel(e)) {
-        // Check if the error was due to a canceled request.
-        log('Request canceled $e');
-      }
-      return [];
-    } catch (e) {
-      log('Error fetching posts: $e');
-      return [];
+  /// PUT Method
+  static Future<T?> put<T>({
+    required String path,
+    Object? data,
+    Map<String, dynamic>? headers,
+    CancelToken? token,
+    T Function(dynamic data)? parser,
+  }) async {
+    return request(
+      path: path,
+      method: 'PUT',
+      data: data,
+      headers: headers,
+      token: token,
+      parser: parser,
+    );
+  }
+
+  /// DELETE Method
+  static Future<T?> delete<T>({
+    required String path,
+    Object? data,
+    Map<String, dynamic>? headers,
+    CancelToken? token,
+    T Function(dynamic data)? parser,
+  }) async {
+    return request(
+      path: path,
+      method: 'DELETE',
+      data: data,
+      headers: headers,
+      token: token,
+      parser: parser,
+    );
+  }
+
+  /// Handle Errors Globally
+  static void handleError(DioException error) {
+    switch (error.type) {
+      case DioExceptionType.connectionTimeout:
+        log('Connection timeout: ${error.message}');
+        break;
+      case DioExceptionType.receiveTimeout:
+        log('Receive timeout: ${error.message}');
+        break;
+      case DioExceptionType.badResponse:
+        log('Bad response: ${error.response?.statusCode} ${error.response?.data}');
+        break;
+      default:
+        log('Unexpected error: ${error.message}');
     }
   }
 }
