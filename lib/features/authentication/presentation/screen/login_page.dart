@@ -59,6 +59,8 @@ class _LoginPageState extends State<LoginPage> {
                 trailingIcon: Icons.visibility,
                 obscureText: true,
               ),
+
+              // Login button
               Padding(
                 padding: const EdgeInsets.all(TPadding.p24),
                 child: ElevatedButton(
@@ -66,11 +68,14 @@ class _LoginPageState extends State<LoginPage> {
                   child: const TextWidget('Login'),
                 ),
               ),
+
+              // Move to Register page
               Center(
                 child: GestureDetector(
                   onTap: () => context.go('/RegisterPage'),
                   child: RichText(
                     text: TextSpan(
+                      style: Theme.of(context).textTheme.bodyLarge,
                       text: 'Don\'t have an account? ',
                       children: [
                         TextSpan(

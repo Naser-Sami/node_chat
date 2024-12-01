@@ -6,13 +6,12 @@ final darkElevatedButtonTheme = ElevatedButtonThemeData(
     elevation: 0,
     minimumSize: const Size(double.infinity, 54),
     overlayColor: DarkThemeColors.onPrimaryFixedVariant,
-    foregroundColor: DarkThemeColors.tertiary,
+    backgroundColor: DarkThemeColors.primary,
+    foregroundColor: Colors.white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(TRadius.bR30),
     ),
-    textStyle: TTextStyle.titleMedium().apply(
-      color: DarkThemeColors.text,
-    ),
+    textStyle: TTextStyle.titleLarge(),
   ),
 );
 
@@ -21,12 +20,11 @@ final lightElevatedButtonTheme = ElevatedButtonThemeData(
     elevation: 0,
     minimumSize: const Size(double.infinity, 54),
     overlayColor: LightThemeColors.onPrimaryFixedVariant,
-    foregroundColor: LightThemeColors.tertiary,
+    backgroundColor: LightThemeColors.primary,
+    foregroundColor: Colors.white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(TRadius.bR30),
     ),
-    textStyle: TTextStyle.titleMedium().apply(
-      color: LightThemeColors.text,
-    ),
+    textStyle: TTextStyle.titleLarge(),
   ),
 );

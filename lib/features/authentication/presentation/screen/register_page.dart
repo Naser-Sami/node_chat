@@ -80,6 +80,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   onTap: () => context.go('/'),
                   child: RichText(
                     text: TextSpan(
+                      style: Theme.of(context).textTheme.bodyLarge,
                       text: 'Already have an account? ',
                       children: [
                         TextSpan(

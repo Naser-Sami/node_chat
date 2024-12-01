@@ -13,16 +13,6 @@ ThemeData _darkTheme = ThemeData.dark(useMaterial3: true).copyWith(
   dividerColor: DarkThemeColors.onBackground.withOpacity(0.25),
   textButtonTheme: darkTextButtonTheme,
   elevatedButtonTheme: darkElevatedButtonTheme,
-  // buttonTheme: const ButtonThemeData(
-  //   splashColor: Colors.transparent,
-  //   highlightColor: Colors.transparent,
-  //   hoverColor: Colors.transparent,
-  // ),
-  // typography: Typography(),
-  // -- Text form field
-  // inputDecorationTheme:
-  // -- Elevated Button
-  // elevatedButtonTheme:
 );
 
 ThemeData get darkTheme => _darkTheme;

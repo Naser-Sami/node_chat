@@ -14,7 +14,7 @@ class SystemFontsStyle {
   static const double headlineSmall = 24;
 
   // Title Styling
-  static const double titleLarge = 22;
+  static const double titleLarge = 20;
   static const double titleMedium = 16;
   static const double titleSmall = 14;
 
