@@ -75,13 +75,13 @@ class ApiClient {
       log('DioException: ${e.message}');
       if (CancelToken.isCancel(e)) {
         log('Request canceled');
+        throw Exception('Request canceled: $e');
       } else {
         handleError(e);
       }
-      return null;
     } catch (e) {
       log('Unhandled error: $e');
-      return null;
+      throw Exception(e);
     }
   }
 
@@ -162,15 +162,16 @@ class ApiClient {
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
         log('Connection timeout: ${error.message}');
-        break;
+        throw Exception('Connection timeout: ${error.message}');
       case DioExceptionType.receiveTimeout:
         log('Receive timeout: ${error.message}');
-        break;
+        throw Exception('Receive timeout: ${error.message}');
       case DioExceptionType.badResponse:
         log('Bad response: ${error.response?.statusCode} ${error.response?.data}');
-        break;
+        throw Exception(error.response?.data['message']);
       default:
         log('Unexpected error: ${error.message}');
+        throw Exception('Unexpected error: ${error.message}');
     }
   }
 }

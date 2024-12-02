@@ -25,7 +25,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
       user.toString();
       emit(AuthSuccessState('User registered successfully'));
     } catch (e) {
-      emit(AuthFailureState('Failed to register user'));
+      emit(AuthFailureState(e.toString()));
     }
   }
 
@@ -37,7 +37,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
       await _storage.write(key: 'token', value: 'user.token');
       emit(AuthSuccessState('User logged in successfully'));
     } catch (e) {
-      emit(AuthFailureState('Failed to login user'));
+      emit(AuthFailureState(e.toString()));
     }
   }
 }

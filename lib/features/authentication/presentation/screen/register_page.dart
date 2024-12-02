@@ -1,8 +1,11 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '/core/_core.dart';
 import '/config/_config.dart';
+import '/features/_features.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -33,12 +36,14 @@ class _RegisterPageState extends State<RegisterPage> {
     _passwordController.dispose();
   }
 
-  void _showInputValues() {
-    final username = _usernameController.text;
-    final email = _emailController.text;
-    final password = _passwordController.text;
-
-    log('Username: $username - Email: $email - Password: $password');
+  void _onRegister() {
+    context.read<AuthBloc>().add(
+          RegisterEvent(
+            username: _usernameController.text,
+            email: _emailController.text,
+            password: _passwordController.text,
+          ),
+        );
   }
 
   @override
@@ -68,13 +73,39 @@ class _RegisterPageState extends State<RegisterPage> {
                 trailingIcon: Icons.visibility,
                 obscureText: true,
               ),
-              Padding(
-                padding: const EdgeInsets.all(TPadding.p24),
-                child: ElevatedButton(
-                  onPressed: _showInputValues,
-                  child: const TextWidget('Register'),
-                ),
+
+              BlocConsumer<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  if (state is AuthLoadingState) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  // Register button
+                  return Padding(
+                    padding: const EdgeInsets.all(TPadding.p24),
+                    child: ElevatedButton(
+                      onPressed: _onRegister,
+                      child: const TextWidget('Register'),
+                    ),
+                  );
+                },
+                listener: (context, state) {
+                  if (state is AuthSuccessState) {
+                    context.go('/');
+                  }
+
+                  if (state is AuthFailureState) {
+                    THelperFunctions.showToastBar(
+                      context,
+                      TextWidget(state.error),
+                    );
+                  }
+                },
               ),
+
+              // Login link
               Center(
                 child: GestureDetector(
                   onTap: () => context.go('/'),

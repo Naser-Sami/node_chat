@@ -73,6 +73,9 @@ dependencies:
   # Skeleton
   skeletonizer: ^1.4.2
 
+  # Toast
+  delightful_toast: ^1.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
