@@ -8,12 +8,8 @@ final providers = [
   BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
   BlocProvider<AuthBloc>(
     create: (context) => AuthBloc(
-      registerUseCase: RegisterUseCase(
-        repo: sl<AuthRepository>(),
-      ),
-      loginUseCase: LoginUseCase(
-        repo: sl<AuthRepository>(),
-      ),
+      registerUseCase: sl<RegisterUseCase>(),
+      loginUseCase: sl<LoginUseCase>(),
     ),
   ),
 ];

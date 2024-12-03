@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,18 +29,18 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    super.dispose();
   }
 
   void _onRegister() {
     context.read<AuthBloc>().add(
           RegisterEvent(
-            username: _usernameController.text,
-            email: _emailController.text,
-            password: _passwordController.text,
+            username: _usernameController.text.trim(),
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim(),
           ),
         );
   }
@@ -93,7 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 },
                 listener: (context, state) {
                   if (state is AuthSuccessState) {
-                    context.go('/');
+                    context.go('/ChatPage');
                   }
 
                   if (state is AuthFailureState) {

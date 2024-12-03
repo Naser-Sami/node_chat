@@ -5,7 +5,7 @@ class AuthRemoteDataSource {
   Future<UserModel> login(String email, String password) async {
     final user = await ApiClient.post<UserModel>(
       path: '/auth/login',
-      parser: (data) => UserModel.fromJson(data),
+      parser: (data) => UserModel.fromJson(data['user']),
       data: {"email": email, "password": password},
     );
 
@@ -15,7 +15,10 @@ class AuthRemoteDataSource {
   Future<UserModel> register(String username, String email, String password) async {
     final user = await ApiClient.post<UserModel>(
       path: '/auth/register',
-      parser: (data) => UserModel.fromJson(data),
+      parser: (data) {
+        return UserModel.fromJson(data['user']);
+      },
+      // token: ,
       data: {"username": username, "email": email, "password": password},
     );
 

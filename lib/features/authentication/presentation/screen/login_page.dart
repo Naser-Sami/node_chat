@@ -1,8 +1,10 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '/core/_core.dart';
 import '/config/_config.dart';
+import '/features/_features.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -25,16 +27,18 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    super.dispose();
   }
 
-  void _showInputValues() {
-    final email = _emailController.text;
-    final password = _passwordController.text;
-
-    log('Email: $email - Password: $password');
+  void _onLogin() {
+    context.read<AuthBloc>().add(
+          LoginEvent(
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim(),
+          ),
+        );
   }
 
   @override
@@ -60,13 +64,35 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: true,
               ),
 
-              // Login button
-              Padding(
-                padding: const EdgeInsets.all(TPadding.p24),
-                child: ElevatedButton(
-                  onPressed: _showInputValues,
-                  child: const TextWidget('Login'),
-                ),
+              BlocConsumer<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  if (state is AuthLoadingState) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  // Login button
+                  return Padding(
+                    padding: const EdgeInsets.all(TPadding.p24),
+                    child: ElevatedButton(
+                      onPressed: _onLogin,
+                      child: const TextWidget('Login'),
+                    ),
+                  );
+                },
+                listener: (context, state) {
+                  if (state is AuthSuccessState) {
+                    context.go('/ChatPage');
+                  }
+
+                  if (state is AuthFailureState) {
+                    THelperFunctions.showToastBar(
+                      context,
+                      TextWidget(state.error),
+                    );
+                  }
+                },
               ),
 
               // Move to Register page

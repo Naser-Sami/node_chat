@@ -7,6 +7,7 @@ class UserMapper {
       id: model.id,
       email: model.email,
       username: model.username,
+      token: model.token,
     );
   }
 
@@ -16,6 +17,7 @@ class UserMapper {
       id: entity.id,
       email: entity.email,
       username: entity.username,
+      token: entity.token,
     );
   }
 }

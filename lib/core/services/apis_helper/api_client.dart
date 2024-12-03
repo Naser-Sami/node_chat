@@ -78,6 +78,7 @@ class ApiClient {
         throw Exception('Request canceled: $e');
       } else {
         handleError(e);
+        throw Exception(e);
       }
     } catch (e) {
       log('Unhandled error: $e');
