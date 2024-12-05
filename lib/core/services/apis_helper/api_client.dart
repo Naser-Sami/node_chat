@@ -1,21 +1,33 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiClient {
   static const String baseUrl = 'http://localhost:3000';
 
-  // Dio instance
-  static final Dio dio = Dio(
-    BaseOptions(
-      baseUrl: baseUrl,
-      connectTimeout: const Duration(seconds: 5),
-      receiveTimeout: const Duration(seconds: 5),
-      headers: {'Content-Type': 'application/json'},
-    ),
-  );
-
   // Optional cancel token for request cancellation
   static CancelToken? cancelToken;
+
+  // Dio instance
+  static late final Dio dio;
+
+  static Future<void> initDio() async {
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'token') ?? '';
+
+    dio = Dio(
+      BaseOptions(
+        baseUrl: baseUrl,
+        connectTimeout: const Duration(seconds: 5),
+        receiveTimeout: const Duration(seconds: 5),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+  }
 
   // Constructor to add interceptors
   ApiClient() {

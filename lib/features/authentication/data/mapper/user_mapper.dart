@@ -1,6 +1,8 @@
 import '/features/authentication/_authentication.dart';
 
 class UserMapper {
+  UserMapper._();
+
   // Convert UserModel to UserEntity
   static UserEntity toEntity(UserModel model) {
     return UserEntity(
