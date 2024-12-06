@@ -12,4 +12,9 @@ final providers = [
       loginUseCase: sl<LoginUseCase>(),
     ),
   ),
+  BlocProvider<ConversationsBloc>(
+    create: (context) => ConversationsBloc(
+      sl<FetchConversationsUseCase>(),
+    ),
+  ),
 ];

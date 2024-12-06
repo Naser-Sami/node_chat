@@ -1,9 +1,9 @@
-import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '/core/_core.dart';
 import '/features/authentication/domain/use_cases/_use_cases.dart';
 
 part 'auth_events.dart';
@@ -23,8 +23,8 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
     emit(AuthLoadingState());
 
     try {
-      final user = await registerUseCase.call(event.username, event.email, event.password);
-      log(user.toString());
+      await registerUseCase.call(event.username, event.email, event.password);
+
       emit(AuthSuccessState('User registered successfully'));
     } catch (e) {
       emit(AuthFailureState(e.toString()));
@@ -35,8 +35,9 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
     emit(AuthLoadingState());
     try {
       final user = await loginUseCase.call(event.email, event.password);
-      log(user.toString());
+
       await _storage.write(key: 'token', value: user.token);
+      ApiClient.token = user.token;
       emit(AuthSuccessState('User logged in successfully'));
     } catch (e) {
       emit(AuthFailureState(e.toString()));

@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 listener: (context, state) {
                   if (state is AuthSuccessState) {
-                    context.go('/ChatPage');
+                    context.go('/ConversationsPage');
                   }
 
                   if (state is AuthFailureState) {

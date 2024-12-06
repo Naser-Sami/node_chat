@@ -4,7 +4,7 @@ class ConversationEntity extends Equatable {
   final String id;
   final String participantName;
   final String lastMessage;
-  final String lastMessageTime;
+  final DateTime lastMessageTime;
 
   const ConversationEntity({
     required this.id,
@@ -17,7 +17,7 @@ class ConversationEntity extends Equatable {
     String? id,
     String? participantName,
     String? lastMessage,
-    String? lastMessageTime,
+    DateTime? lastMessageTime,
   }) {
     return ConversationEntity(
       id: id ?? this.id,

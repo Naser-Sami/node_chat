@@ -10,7 +10,6 @@ final sl = GetIt.I;
 
 class DI {
   Future<void> init() async {
-    ApiClient.initDio();
 
     // BLOC's
     sl.registerLazySingleton<AuthBloc>(

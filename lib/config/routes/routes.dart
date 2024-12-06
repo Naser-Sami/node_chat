@@ -1,7 +1,11 @@
+
+import 'dart:developer';
+
 import '/core/_core.dart';
 import '/config/_config.dart';
 import '/features/_features.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // GoRouter configuration
 final router = GoRouter(
@@ -10,7 +14,17 @@ final router = GoRouter(
   observers: [AppNavigatorObserver()],
   navigatorKey: NavigationService.navigatorKey, // Set the navigatorKey
   errorBuilder: (context, state) => ErrorPage(state.error.toString()),
-  redirect: (context, state) {
+  redirect: (context, state) async {
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'token') ?? '';
+    ApiClient.token = token;
+
+    log('Token: $token');
+
+    if (token.isEmpty) {
+      return '/';
+    }
+
     return null;
   },
   routes: [
@@ -51,12 +65,12 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      name: 'MessagePage',
-      path: '/MessagePage',
+      name: 'ConversationsPage',
+      path: '/ConversationsPage',
       pageBuilder: (context, state) => fadeTransitionPage(
         context,
         state,
-        const MessagePage(),
+        const ConversationsPage(),
       ),
       redirect: (context, state) {
         return null;

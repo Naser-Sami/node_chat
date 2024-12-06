@@ -9,7 +9,7 @@ class ConversationMapper {
       id: model.id,
       participantName: model.participantName,
       lastMessage: model.lastMessage,
-      lastMessageTime: model.lastMessageTime,
+      lastMessageTime: DateTime.parse(model.lastMessageTime),
     );
   }
 
@@ -19,7 +19,7 @@ class ConversationMapper {
       id: entity.id,
       participantName: entity.participantName,
       lastMessage: entity.lastMessage,
-      lastMessageTime: entity.lastMessageTime,
+      lastMessageTime: entity.lastMessageTime.toIso8601String(),
     );
   }
 }

@@ -1,33 +1,26 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiClient {
   static const String baseUrl = 'http://localhost:3000';
-
-  // Optional cancel token for request cancellation
-  static CancelToken? cancelToken;
+  static String? token;
 
   // Dio instance
-  static late final Dio dio;
+  static final Dio dio = Dio(
+    BaseOptions(
+      baseUrl: baseUrl,
+      connectTimeout: const Duration(seconds: 5),
+      receiveTimeout: const Duration(seconds: 5),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    ),
+  );
 
-  static Future<void> initDio() async {
-    const storage = FlutterSecureStorage();
-    final token = await storage.read(key: 'token') ?? '';
-
-    dio = Dio(
-      BaseOptions(
-        baseUrl: baseUrl,
-        connectTimeout: const Duration(seconds: 5),
-        receiveTimeout: const Duration(seconds: 5),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      ),
-    );
-  }
+  // Optional cancel token for request cancellation
+  // static CancelToken? cancelToken;
 
   // Constructor to add interceptors
   ApiClient() {
@@ -50,12 +43,12 @@ class ApiClient {
   }
 
   /// Cancel any ongoing requests
-  static void cancelOngoingRequests() {
-    if (cancelToken != null && !cancelToken!.isCancelled) {
-      cancelToken?.cancel('Request canceled.');
-    }
-    cancelToken = CancelToken();
-  }
+  // static void cancelOngoingRequests() {
+  //   if (cancelToken != null && !cancelToken!.isCancelled) {
+  //     cancelToken?.cancel('Request canceled.');
+  //   }
+  //   cancelToken = CancelToken();
+  // }
 
   /// General HTTP Request Handler
   static Future<T?> request<T>({
@@ -64,9 +57,17 @@ class ApiClient {
     Map<String, dynamic>? queryParameters,
     Object? data,
     Map<String, dynamic>? headers,
-    CancelToken? token,
     T Function(dynamic data)? parser,
   }) async {
+    headers ??= dio.options.headers;
+    token ??= headers['Authorization'];
+
+    log('Request: $method $path');
+    log('Token $token');
+    log('Query Parameters: $queryParameters');
+    log('Data: $data');
+    log('Headers: $headers');
+
     try {
       // Make HTTP request
       final response = await dio.request(
@@ -74,8 +75,10 @@ class ApiClient {
         options: Options(method: method, headers: headers),
         queryParameters: queryParameters,
         data: data,
-        cancelToken: token ?? cancelToken,
       );
+
+      log('Response: ${response.statusCode} ${response.realUri}');
+      log('Response Data: ${response.data}');
 
       // Parse response using the provided parser
       if (parser != null) {
@@ -85,13 +88,8 @@ class ApiClient {
       }
     } on DioException catch (e) {
       log('DioException: ${e.message}');
-      if (CancelToken.isCancel(e)) {
-        log('Request canceled');
-        throw Exception('Request canceled: $e');
-      } else {
-        handleError(e);
-        throw Exception(e);
-      }
+      handleError(e);
+      throw Exception(e);
     } catch (e) {
       log('Unhandled error: $e');
       throw Exception(e);
@@ -103,15 +101,15 @@ class ApiClient {
     required String path,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
-    CancelToken? token,
     T Function(dynamic data)? parser,
   }) async {
+    log('GET DATA: $parser');
+
     return request(
       path: path,
       method: 'GET',
       queryParameters: queryParameters,
       headers: headers,
-      token: token,
       parser: parser,
     );
   }
@@ -121,7 +119,6 @@ class ApiClient {
     required String path,
     Object? data,
     Map<String, dynamic>? headers,
-    CancelToken? token,
     T Function(dynamic data)? parser,
   }) async {
     return request(
@@ -129,7 +126,6 @@ class ApiClient {
       method: 'POST',
       data: data,
       headers: headers,
-      token: token,
       parser: parser,
     );
   }
@@ -139,7 +135,6 @@ class ApiClient {
     required String path,
     Object? data,
     Map<String, dynamic>? headers,
-    CancelToken? token,
     T Function(dynamic data)? parser,
   }) async {
     return request(
@@ -147,7 +142,6 @@ class ApiClient {
       method: 'PUT',
       data: data,
       headers: headers,
-      token: token,
       parser: parser,
     );
   }
@@ -157,7 +151,6 @@ class ApiClient {
     required String path,
     Object? data,
     Map<String, dynamic>? headers,
-    CancelToken? token,
     T Function(dynamic data)? parser,
   }) async {
     return request(
@@ -165,7 +158,6 @@ class ApiClient {
       method: 'DELETE',
       data: data,
       headers: headers,
-      token: token,
       parser: parser,
     );
   }
