@@ -1,6 +1,5 @@
 import 'package:get_it/get_it.dart';
 
-import '/core/_core.dart';
 import '/config/_config.dart';
 import '/features/_features.dart';
 
@@ -10,12 +9,24 @@ final sl = GetIt.I;
 
 class DI {
   Future<void> init() async {
-
     // BLOC's
     sl.registerLazySingleton<AuthBloc>(
       () => AuthBloc(
         registerUseCase: sl(),
         loginUseCase: sl(),
+      ),
+    );
+
+    sl.registerLazySingleton<ConversationsBloc>(
+      () => ConversationsBloc(
+        sl(),
+      ),
+    );
+
+    sl.registerLazySingleton<MessagesBloc>(
+      () => MessagesBloc(
+        sl(),
+        sl(),
       ),
     );
 
@@ -35,6 +46,10 @@ class DI {
       () => ConversationsRemoteDataSource(),
     );
 
+    sl.registerLazySingleton<MessagesRemoteDataSource>(
+      () => MessagesRemoteDataSource(),
+    );
+
     // REPOSITORIES
     sl.registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(
@@ -44,6 +59,12 @@ class DI {
 
     sl.registerLazySingleton<ConversationsRepository>(
       () => ConversationsRepositoryImpl(
+        sl(),
+      ),
+    );
+
+    sl.registerLazySingleton<MessagesRepository>(
+      () => MessagesRepositoryImpl(
         sl(),
       ),
     );
@@ -64,6 +85,18 @@ class DI {
     sl.registerLazySingleton<FetchConversationsUseCase>(
       () => FetchConversationsUseCase(
         repo: sl(),
+      ),
+    );
+
+    sl.registerLazySingleton<FetchMessagesUseCase>(
+      () => FetchMessagesUseCase(
+        sl(),
+      ),
+    );
+
+    sl.registerLazySingleton<SendMessageUseCase>(
+      () => SendMessageUseCase(
+        sl(),
       ),
     );
   }

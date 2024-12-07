@@ -17,4 +17,10 @@ final providers = [
       sl<FetchConversationsUseCase>(),
     ),
   ),
+  BlocProvider<MessagesBloc>(
+    create: (context) => MessagesBloc(
+      sl<FetchMessagesUseCase>(),
+      sl<SendMessageUseCase>(),
+    ),
+  ),
 ];

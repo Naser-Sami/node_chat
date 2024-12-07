@@ -76,6 +76,9 @@ dependencies:
   # Toast
   delightful_toast: ^1.1.0
 
+  # Socket IO
+  socket_io_client: ^3.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

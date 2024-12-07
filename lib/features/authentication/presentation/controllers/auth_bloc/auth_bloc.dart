@@ -23,8 +23,11 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
     emit(AuthLoadingState());
 
     try {
-      await registerUseCase.call(event.username, event.email, event.password);
+      final user = await registerUseCase.call(event.username, event.email, event.password);
+      await _storage.write(key: 'token', value: user.token);
+      await _storage.write(key: 'userId', value: user.id);
 
+      ApiClient.token = user.token;
       emit(AuthSuccessState('User registered successfully'));
     } catch (e) {
       emit(AuthFailureState(e.toString()));
@@ -35,8 +38,9 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
     emit(AuthLoadingState());
     try {
       final user = await loginUseCase.call(event.email, event.password);
-
       await _storage.write(key: 'token', value: user.token);
+      await _storage.write(key: 'userId', value: user.id);
+
       ApiClient.token = user.token;
       emit(AuthSuccessState('User logged in successfully'));
     } catch (e) {
