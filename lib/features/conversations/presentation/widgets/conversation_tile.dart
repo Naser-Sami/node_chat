@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '/core/_core.dart';
@@ -53,11 +54,19 @@ class ConversationTileWidget extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final conversation = state.conversations[index];
 
-                    return _buildMessageTile(
-                      context,
-                      name: conversation.participantName,
-                      message: conversation.lastMessage,
-                      time: conversation.lastMessageTime.fullFormatted,
+                    return GestureDetector(
+                      onTap: () {
+                        context.go(
+                          '/ChatPage/${conversation.id}/${conversation.participantName}',
+                          extra: conversation, // Optional if you need to pass the entire conversation object
+                        );
+                      },
+                      child: _buildMessageTile(
+                        context,
+                        name: conversation.participantName,
+                        message: conversation.lastMessage,
+                        time: conversation.lastMessageTime.fullFormatted,
+                      ),
                     );
                   },
                 );

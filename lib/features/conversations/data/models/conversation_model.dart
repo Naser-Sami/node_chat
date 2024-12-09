@@ -15,10 +15,10 @@ class ConversationModel extends Equatable {
 
   factory ConversationModel.fromJson(Map<String, dynamic> json) {
     return ConversationModel(
-      id: json['conversation_id'] as String,
-      participantName: json['participant_name'] as String,
-      lastMessage: json['last_message'] as String,
-      lastMessageTime: json['last_message_time'] as String,
+      id: json['conversation_id'] ?? '',
+      participantName: json['participant_name']  ?? '',
+      lastMessage: json['last_message']  ?? '',
+      lastMessageTime: json['last_message_time']  ?? '',
     );
   }
 

@@ -60,7 +60,7 @@ class ApiClient {
     T Function(dynamic data)? parser,
   }) async {
     headers ??= dio.options.headers;
-    token ??= headers['Authorization'];
+    headers['Authorization'] = 'Bearer $token';
 
     log('Request: $method $path');
     log('Token $token');

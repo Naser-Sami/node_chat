@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:node_chat/core/_core.dart';
 
 import '/config/_config.dart';
 import '/features/_features.dart';
@@ -33,6 +34,11 @@ class DI {
     // CUBIT's
     sl.registerLazySingleton<ThemeCubit>(
       () => ThemeCubit(),
+    );
+
+    // PROVIDERS
+    sl.registerLazySingleton<SocketService>(
+      () => SocketService(),
     );
 
     // LOCAL STORAGE

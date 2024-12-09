@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import '/core/_core.dart';
@@ -12,7 +11,8 @@ final router = GoRouter(
   initialLocation: '/',
   // Add your navigator observers
   observers: [AppNavigatorObserver()],
-  navigatorKey: NavigationService.navigatorKey, // Set the navigatorKey
+  navigatorKey: NavigationService.navigatorKey,
+  // Set the navigatorKey
   errorBuilder: (context, state) => ErrorPage(state.error.toString()),
   redirect: (context, state) async {
     const storage = FlutterSecureStorage();
@@ -54,14 +54,19 @@ final router = GoRouter(
     ),
     GoRoute(
       name: 'ChatPage',
-      path: '/ChatPage',
-      pageBuilder: (context, state) => fadeTransitionPage(
-        context,
-        state,
-        const ChatPage(),
-      ),
-      redirect: (context, state) {
-        return null;
+      path: '/ChatPage/:conversationId/:mate',
+      pageBuilder: (context, state) {
+        final conversationId = state.pathParameters['conversationId'] ?? '';
+        final mate = state.pathParameters['mate'] ?? '';
+
+        return fadeTransitionPage(
+          context,
+          state,
+          ChatPage(
+            conversationId: conversationId,
+            mate: mate,
+          ),
+        );
       },
     ),
     GoRoute(

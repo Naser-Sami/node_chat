@@ -22,6 +22,10 @@ Future<void> main() async {
   // Ensure Service Locator is Started
   DI().init();
 
+  // -- Add Socket IO
+  final socketService = SocketService();
+  await socketService.initSocket();
+
   runApp(
     MultiBlocProvider(
       providers: providers,

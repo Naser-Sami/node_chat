@@ -1,10 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '/core/_core.dart';
 import '/config/_config.dart';
+import '/features/messages/_messages.dart';
 
-class ChatPage extends StatelessWidget {
-  const ChatPage({super.key});
+class ChatPage extends StatefulWidget {
+  final String conversationId;
+  final String mate;
+
+  const ChatPage({super.key, required this.conversationId, required this.mate});
+
+  @override
+  State<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
+  late final TextEditingController _messageController;
+  final _storage = const FlutterSecureStorage();
+  String userId = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    _messageController = TextEditingController();
+    context.read<MessagesBloc>().add(
+          LoadMessagesEvent(conversationId: widget.conversationId),
+        );
+    fetchUserId();
+  }
+
+  void fetchUserId() async {
+    final userId = await _storage.read(key: 'userId');
+    setState(() {
+      this.userId = userId!;
+    });
+  }
+
+  void _sendMessage() {
+    final message = _messageController.text.trim();
+    if (message.isNotEmpty) {
+      context.read<MessagesBloc>().add(
+            SendMessageEvent(
+              conversationId: widget.conversationId,
+              content: message,
+            ),
+          );
+
+      _messageController.clear();
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _messageController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +73,7 @@ class ChatPage extends StatelessWidget {
               ),
             ),
             TSize.s16.toWidth,
-            const TextWidget('Danny I'),
+            TextWidget(widget.mate),
           ],
         ),
         actions: [
@@ -39,33 +92,53 @@ class ChatPage extends StatelessWidget {
                   horizontal: TPadding.p08,
                   vertical: TPadding.p24,
                 ),
-                child: ListView(
-                  children: [
-                    _buildReceiveMessage(
-                      context,
-                      message: 'Hello, how are you?',
-                    ),
-                    _buildSendMessage(
-                      context,
-                      message: 'I am fine, thank you.',
-                    ),
-                    _buildSendMessage(
-                      context,
-                      message: 'What about you?',
-                    ),
-                    _buildReceiveMessage(
-                      context,
-                      message: 'I am fine, thank you.',
-                    ),
-                  ],
+                child: BlocBuilder<MessagesBloc, MessagesState>(
+                  builder: (context, state) {
+                    if (state is MessagesLoadingState) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    if (state is MessagesErrorState) {
+                      return Center(
+                        child: Text(state.message),
+                      );
+                    }
+
+                    if (state is MessagesLoadedState) {
+                      return ListView.builder(
+                        itemCount: state.messages.length,
+                        itemBuilder: (context, index) {
+                          final message = state.messages[index];
+                          final isSenderMessage = message.senderId == userId;
+
+                          if (isSenderMessage) {
+                            return _buildSendMessage(
+                              context,
+                              message: message.content,
+                            );
+                          } else {
+                            return _buildReceiveMessage(
+                              context,
+                              message: message.content,
+                            );
+                          }
+                        },
+                      );
+                    }
+
+                    return const SizedBox.shrink();
+                  },
                 ),
               ),
             ),
             TextFormFieldWidget(
-              controller: TextEditingController(),
+              controller: _messageController,
               hintText: 'Message',
               leadingIcon: Icons.camera_alt,
               trailingIcon: Icons.send,
+              onTrailingIconPressed: _sendMessage,
             ),
           ],
         ),
