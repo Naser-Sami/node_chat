@@ -14,7 +14,7 @@ class ContactModel extends Equatable {
 
   factory ContactModel.fromJson(Map<String, dynamic> json) {
     return ContactModel(
-      id: json['id'] ?? '',
+      id: json['contact_id'] ?? '',
       username: json['username'] ?? '',
       email: json['email'] ?? '',
     );
@@ -22,7 +22,7 @@ class ContactModel extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'contact_id': id,
       'username': username,
       'email': email,
     };

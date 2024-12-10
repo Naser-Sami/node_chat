@@ -23,4 +23,10 @@ final providers = [
       sl<SendMessageUseCase>(),
     ),
   ),
+  BlocProvider<ContactsBloc>(
+    create: (context) => ContactsBloc(
+      sl<FetchContactsUseCase>(),
+      sl<AddContactUseCase>(),
+    ),
+  ),
 ];

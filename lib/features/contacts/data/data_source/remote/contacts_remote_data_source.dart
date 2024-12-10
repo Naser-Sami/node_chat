@@ -13,7 +13,7 @@ class ContactsRemoteDataSource {
   }
 
   Future<void> addContact(String contactEmail) async {
-    await ApiClient.post<String>(
+    await ApiClient.post<Map<String, dynamic>>(
       path: '/contacts',
       data: {'contactEmail': contactEmail},
       parser: (data) => data,

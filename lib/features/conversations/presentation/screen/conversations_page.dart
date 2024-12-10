@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../controllers/_controllers.dart';
 import '../widgets/_widgets.dart';
@@ -35,8 +37,10 @@ class _ConversationsPageState extends State<ConversationsPage> {
       ),
       body: const ConversationsBodyWidget(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
+        onPressed: () {
+          GoRouter.of(context).push('/ContactsPage');
+        },
+        child: const Icon(Icons.contact_page_outlined),
       ),
     );
   }
