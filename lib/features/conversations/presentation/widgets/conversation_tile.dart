@@ -56,9 +56,11 @@ class ConversationTileWidget extends StatelessWidget {
 
                     return GestureDetector(
                       onTap: () {
-                        context.go(
+                        //naser_ebedo@gmail.com
+                        //Test@123
+                        GoRouter.of(context).push(
                           '/ChatPage/${conversation.id}/${conversation.participantName}',
-                          extra: conversation, // Optional if you need to pass the entire conversation object
+                          extra: conversation,
                         );
                       },
                       child: _buildMessageTile(
@@ -90,7 +92,6 @@ class ConversationTileWidget extends StatelessWidget {
       ),
     );
   }
-
   Widget _buildMessageTile(
     BuildContext context, {
     required String name,

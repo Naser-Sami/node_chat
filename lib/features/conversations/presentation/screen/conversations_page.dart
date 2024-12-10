@@ -34,6 +34,10 @@ class _ConversationsPageState extends State<ConversationsPage> {
         ],
       ),
       body: const ConversationsBodyWidget(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

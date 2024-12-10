@@ -11,14 +11,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeMode>(
       builder: (context, state) {
-        return MaterialApp.router(
-          title: 'P.O.R.T.F.O.L.I.O',
-          debugShowCheckedModeBanner: false,
-          themeMode: state,
-          theme: lightTheme,
-          darkTheme: darkTheme,
-          scrollBehavior: scrollBehavior,
-          routerConfig: router,
+        return GestureDetector(
+          onHorizontalDragStart: (_) {}, // Ensures gestures are passed through
+          child: MaterialApp.router(
+            title: 'N O D E C H A T',
+            debugShowCheckedModeBanner: false,
+            themeMode: state,
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            scrollBehavior: scrollBehavior,
+            routerConfig: router,
+          ),
         );
       },
     );

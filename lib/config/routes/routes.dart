@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
+
 import '/core/_core.dart';
 import '/config/_config.dart';
 import '/features/_features.dart';
@@ -29,7 +31,7 @@ final router = GoRouter(
   },
   routes: [
     GoRoute(
-      name: 'LoginPage',
+      name: 'Login',
       path: '/',
       pageBuilder: (context, state) => fadeTransitionPage(
         context,
@@ -41,7 +43,7 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      name: 'RegisterPage',
+      name: 'Register',
       path: '/RegisterPage',
       pageBuilder: (context, state) => fadeTransitionPage(
         context,
@@ -53,16 +55,14 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      name: 'ChatPage',
+      name: 'Chats',
       path: '/ChatPage/:conversationId/:mate',
       pageBuilder: (context, state) {
         final conversationId = state.pathParameters['conversationId'] ?? '';
         final mate = state.pathParameters['mate'] ?? '';
 
-        return fadeTransitionPage(
-          context,
-          state,
-          ChatPage(
+        return CupertinoPage(
+          child: ChatPage(
             conversationId: conversationId,
             mate: mate,
           ),
@@ -70,12 +70,20 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      name: 'ConversationsPage',
+      name: 'Conversations',
       path: '/ConversationsPage',
-      pageBuilder: (context, state) => fadeTransitionPage(
-        context,
-        state,
-        const ConversationsPage(),
+      pageBuilder: (context, state) => const CupertinoPage(
+        child: ConversationsPage(),
+      ),
+      redirect: (context, state) {
+        return null;
+      },
+    ),
+    GoRoute(
+      name: 'Contacts',
+      path: '/ContactsPage',
+      pageBuilder: (context, state) => const CupertinoPage(
+        child: ContactsPage(),
       ),
       redirect: (context, state) {
         return null;

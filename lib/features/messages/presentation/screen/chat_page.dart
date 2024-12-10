@@ -63,6 +63,10 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: true,
+        leading: BackButton(
+          onPressed: () => context.pop(),
+        ),
         centerTitle: false,
         title: Row(
           children: [
@@ -145,7 +149,6 @@ class _ChatPageState extends State<ChatPage> {
       ),
     );
   }
-
   Widget _buildReceiveMessage(BuildContext context, {required String message}) {
     return Align(
       alignment: Alignment.centerLeft,

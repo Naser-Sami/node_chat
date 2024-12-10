@@ -31,6 +31,13 @@ class DI {
       ),
     );
 
+    sl.registerLazySingleton<ContactsBloc>(
+      () => ContactsBloc(
+        sl(),
+        sl(),
+      ),
+    );
+
     // CUBIT's
     sl.registerLazySingleton<ThemeCubit>(
       () => ThemeCubit(),
@@ -56,6 +63,10 @@ class DI {
       () => MessagesRemoteDataSource(),
     );
 
+    sl.registerLazySingleton<ContactsRemoteDataSource>(
+      () => ContactsRemoteDataSource(),
+    );
+
     // REPOSITORIES
     sl.registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(
@@ -71,6 +82,12 @@ class DI {
 
     sl.registerLazySingleton<MessagesRepository>(
       () => MessagesRepositoryImpl(
+        sl(),
+      ),
+    );
+
+    sl.registerLazySingleton<ContactsRepository>(
+      () => ContactsRepositoryImpl(
         sl(),
       ),
     );
@@ -102,6 +119,18 @@ class DI {
 
     sl.registerLazySingleton<SendMessageUseCase>(
       () => SendMessageUseCase(
+        sl(),
+      ),
+    );
+
+    sl.registerLazySingleton<FetchContactsUseCase>(
+      () => FetchContactsUseCase(
+        sl(),
+      ),
+    );
+
+    sl.registerLazySingleton<AddContactUseCase>(
+      () => AddContactUseCase(
         sl(),
       ),
     );

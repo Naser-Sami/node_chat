@@ -1,0 +1,1 @@
+export 'bloc/contacts_bloc.dart';
