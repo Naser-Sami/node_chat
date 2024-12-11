@@ -19,4 +19,14 @@ class ConversationsRemoteDataSource {
 
     return response ?? [] as List<ConversationModel>;
   }
+
+  Future<String> checkOrCreateConversation(String contactId) async {
+    final response = await ApiClient.post<String>(
+      path: '/conversations/check-or-create',
+      data: {'contactId': contactId},
+      parser: (data) => data['conversationId'],
+    );
+
+    return response ?? '';
+  }
 }

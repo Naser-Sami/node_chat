@@ -31,33 +31,33 @@ class ImageUploaderBad implements FileUploaderBad {
 }
 
 // Good example: Separate interfaces for each type of file upload.
-abstract class ImageUploadable {
+abstract class ImageUpload {
   void uploadImage(String path);
 }
 
-abstract class VideoUploadable {
+abstract class VideoUpload {
   void uploadVideo(String path);
 }
 
-abstract class DocumentUploadable {
+abstract class DocumentUpload {
   void uploadDocument(String path);
 }
 
-class ImageUploader implements ImageUploadable {
+class ImageUploader implements ImageUpload {
   @override
   void uploadImage(String path) {
     log('Uploading image from $path');
   }
 }
 
-class VideoUploader implements VideoUploadable {
+class VideoUploader implements VideoUpload {
   @override
   void uploadVideo(String path) {
     log('Uploading video from $path');
   }
 }
 
-class DocumentUploader implements DocumentUploadable {
+class DocumentUploader implements DocumentUpload {
   @override
   void uploadDocument(String path) {
     log('Uploading document from $path');

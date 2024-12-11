@@ -13,7 +13,7 @@ class CreditCardPaymentBad {
 }
 
 class OrderServiceBad {
-  CreditCardPayment paymentProcessor = CreditCardPayment();
+  CreditCardPaymentBad paymentProcessor = CreditCardPaymentBad();
 
   void checkout(double amount) {
     paymentProcessor.processPayment(amount);

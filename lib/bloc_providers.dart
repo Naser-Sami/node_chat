@@ -27,6 +27,7 @@ final providers = [
     create: (context) => ContactsBloc(
       sl<FetchContactsUseCase>(),
       sl<AddContactUseCase>(),
+      sl<CheckOrCreateConversationUseCase>(),
     ),
   ),
 ];

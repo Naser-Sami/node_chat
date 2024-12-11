@@ -26,9 +26,12 @@ class ContactsBodyWidget extends StatelessWidget {
               return ListTile(
                 title: Text(contact.username),
                 subtitle: Text(contact.email),
-                onTap: () {
-                  GoRouter.of(context).pop(contact);
-                },
+                onTap: () => context.read<ContactsBloc>().add(
+                      CheckOrCreateConversationEvent(
+                        contactId: contact.id,
+                        contactName: contact.username,
+                      ),
+                    ),
               );
             },
           );

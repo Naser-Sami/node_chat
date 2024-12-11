@@ -36,3 +36,13 @@ class ContactAddedState extends ContactsState {
   @override
   List<Object> get props => [];
 }
+
+class ConversationStartState extends ContactsState {
+  final String conversationId;
+  final String contactName;
+
+  const ConversationStartState({required this.conversationId, required this.contactName});
+
+  @override
+  List<Object> get props => [conversationId, contactName];
+}

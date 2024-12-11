@@ -17,7 +17,7 @@ class AccountBad {
   }
 }
 
-class PremiumAccountBad extends Account {
+class PremiumAccountBad extends AccountBad {
   PremiumAccountBad(super.balance);
 
   @override

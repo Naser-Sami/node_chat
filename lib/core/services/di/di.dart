@@ -35,6 +35,7 @@ class DI {
       () => ContactsBloc(
         sl(),
         sl(),
+        sl(),
       ),
     );
 
@@ -131,6 +132,12 @@ class DI {
 
     sl.registerLazySingleton<AddContactUseCase>(
       () => AddContactUseCase(
+        sl(),
+      ),
+    );
+
+    sl.registerLazySingleton<CheckOrCreateConversationUseCase>(
+          () => CheckOrCreateConversationUseCase(
         sl(),
       ),
     );
